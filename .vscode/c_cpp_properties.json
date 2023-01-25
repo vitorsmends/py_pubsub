@@ -1,0 +1,25 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/vitor/dynamixel_ws/install/dynamixel_sdk_custom_interfaces/include/**",
+        "/home/vitor/dynamixel_ws/install/dynamixel_sdk/include/**",
+        "/home/vitor/joint_ws/install/ros2_control_test_assets/include/**",
+        "/opt/ros/humble/include/**",
+        "/home/vitor/dynamixel_ws/src/DynamixelSDK/dynamixel_sdk/include/**",
+        "/home/vitor/dynamixel_ws/src/DynamixelSDK/dynamixel_sdk_examples/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
