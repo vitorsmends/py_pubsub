@@ -16,6 +16,7 @@ import rclpy
 from rclpy.node import Node
 from dynamixel_sdk_custom_interfaces.msg import SetPosition
 from std_msgs.msg import String
+# from std_msgs.msg import int32
 
 
 class MinimalPublisher(Node):
@@ -31,10 +32,14 @@ class MinimalPublisher(Node):
         if self.i == 3000:
             self.i = 0
         msg = SetPosition()
-        msg.id = 0
-        msg.position = self.i
+        msg.id.append(1)
+        msg.id.append(2)
+        msg.id.append(3)
+        msg.position.append(self.i)
+        msg.position.append(self.i)
+        msg.position.append(self.i)
         self.publisher_.publish(msg)
-        self.get_logger().info('Publishing: "%s"' % msg)
+        # self.get_logger().info(msg)
         self.i += 100
 
 
