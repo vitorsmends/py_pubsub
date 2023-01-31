@@ -42,7 +42,7 @@ class MinimalPublisher(Node):
         else:
             for j in range(self.sig.shape[0]):  # per motor signal
                 msg.id.append(j+1)
-                msg.position.append(int(self.sig[j][self.i-1]))
+                msg.position.append(self.sig[j][self.i-1])
                 self.get_logger().info('Motor %d: %s' %
                                        (j+1, type(int(self.sig[j][self.i-1]))))
         self.i += 1
