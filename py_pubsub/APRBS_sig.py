@@ -41,23 +41,26 @@ def APRBS(a_range, b_range, nstep):
     return random_signal
 
 
-def multiple_aprbs(a_range, b_range, nstep, ninput):
+def multiple_aprbs(a_range, b_range, nstep, ninput, type='float', factor=1.0):
     u = np.zeros([ninput, nstep])
     for i in range(ninput):
-        u[i, :] = APRBS(a_range, b_range, nstep)
+        u[i, :] = APRBS(a_range, b_range, nstep)*factor
+    if type == 'int':
+        u = u.astype('int32')
     return u
 
 
-ninput = 6
+ninput = 3
 nstep = 100
-a_range = [0, 3]
-b_range = [0, 20]
-u = multiple_aprbs(a_range, b_range, nstep, ninput)
+a_range = [0, 4]
+b_range = [0, 5]
+u = multiple_aprbs(a_range, b_range, nstep, ninput, type='int', factor=100)
 plt.figure()
 for i in range(ninput):
 
-    plt.plot(u[i, :], label='M'+str(i), drawstyle='steps')
+    plt.plot((u[i, :]), label='M'+str(i), drawstyle='steps')
     plt.xlabel('Time')
     plt.ylabel('Amplitude')
 plt.legend()
 plt.show()
+print(int(u[1, 1]))
