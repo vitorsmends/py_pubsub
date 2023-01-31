@@ -17,36 +17,89 @@ from rclpy.node import Node
 from dynamixel_sdk_custom_interfaces.msg import SetPosition
 from std_msgs.msg import String
 # from std_msgs.msg import int32
+import numpy as np
 
 
 class MinimalPublisher(Node):
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         super().__init__('minimal_publisher')
-        self.publisher_ = self.create_publisher(SetPosition, '/set_position', 10)
-        timer_period = 0.5  # seconds
+        self.publisher_ = self.create_publisher(
+            SetPosition, '/set_position', 10)
+        timer_period = args[0]  # seconds
+        self.sig = args[1]  # input signals
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
 
     def timer_callback(self):
-        if self.i == 3000:
-            self.i = 0
+
         msg = SetPosition()
-        msg.id.append(1)
-        msg.id.append(2)
-        msg.id.append(3)
-        msg.position.append(self.i)
-        msg.position.append(self.i)
-        msg.position.append(self.i)
+
+        for j in range(self.sig.shape[0]):  # per motor signal
+            msg.id.append(j+1)
+            msg.position.append(self.sig[j][self.i])
+        self.i += 1
+        if (self.i >= self.sig.shape[1]):
+            self.i = 0
         self.publisher_.publish(msg)
         # self.get_logger().info(msg)
-        self.i += 100
+
+
+def APRBS(a_range, b_range, nstep):
+    # random signal generation
+    # range for amplitude
+    a = np.random.rand(nstep) * (a_range[1]-a_range[0]) + a_range[0]
+    # range for frequency
+    b = np.random.rand(nstep) * (b_range[1]-b_range[0]) + b_range[0]
+    b = np.round(b)
+    b = b.astype(int)
+    b[0] = 0
+
+    for i in range(1, np.size(b)):
+        b[i] = b[i-1]+b[i]
+
+    # Random Signal
+    i = 0
+    random_signal = np.zeros(nstep)
+    while b[i] < np.size(random_signal):
+        k = b[i]
+        random_signal[k:] = a[i]
+        i = i+1
+
+    # PRBS
+    a = np.zeros(nstep)
+    j = 0
+    while j < nstep:
+        a[j] = 5
+        a[j+1] = -5
+        j = j+2
+
+    i = 0
+    prbs = np.zeros(nstep)
+    while b[i] < np.size(prbs):
+        k = b[i]
+        prbs[k:] = a[i]
+        i = i+1
+    return random_signal
+
+
+def multiple_aprbs(a_range, b_range, nstep, ninput):
+    u = np.zeros([ninput, nstep])
+    for i in range(ninput):
+        u[i, :] = APRBS(a_range, b_range, nstep)
+    return u
 
 
 def main(args=None):
     rclpy.init(args=args)
 
-    minimal_publisher = MinimalPublisher()
+    ninput = 6
+    nstep = 100
+    a_range = [0, 3]
+    b_range = [0, 20]
+    u = multiple_aprbs(a_range, b_range, nstep, ninput)
+
+    minimal_publisher = MinimalPublisher(0.5, u)
 
     rclpy.spin(minimal_publisher)
 
