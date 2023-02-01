@@ -103,7 +103,7 @@ def multiple_aprbs(a_range, b_range, nstep, ninput, type='float', factor=1.0):
 def main(args=None):
     rclpy.init(args=args)
     node_time = 1.0
-    ninput = 3
+    ninput = 6
     nstep = 3600
     a_range = [0, 4]  # the motor range are 0 to 4000 - factor = 1000
     b_range = [0, 20]  # rate signal range [MIN TIME, MAX TIME]
