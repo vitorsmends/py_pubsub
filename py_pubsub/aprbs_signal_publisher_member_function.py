@@ -44,7 +44,7 @@ class MinimalPublisher(Node):
                 msg.id.append(j+1)
                 msg.position.append(self.sig[j][self.i-1])
                 self.get_logger().info('Motor %d: %s' %
-                                       (j+1, type(int(self.sig[j][self.i-1]))))
+                                       (j+1, self.sig[j][self.i-1]))
         self.i += 1
         if (self.i >= self.sig.shape[1]):
             self.i = 0
@@ -102,16 +102,16 @@ def multiple_aprbs(a_range, b_range, nstep, ninput, type='float', factor=1.0):
 
 def main(args=None):
     rclpy.init(args=args)
-
+    node_time = 1.0
     ninput = 3
     nstep = 100
-    a_range = [0, 4]
-    b_range = [0, 5]
+    a_range = [0, 4]  # the motor range are 0 to 4000 - factor = 1000
+    b_range = [0, 3]  # rate signal range [MIN TIME, MAX TIME]
     # form the random signal to motors
     u = multiple_aprbs(a_range, b_range, nstep,
                        ninput, type='int', factor=1000.0)
 
-    minimal_publisher = MinimalPublisher(0.5, u)
+    minimal_publisher = MinimalPublisher(node_time, u)
 
     rclpy.spin(minimal_publisher)
 
