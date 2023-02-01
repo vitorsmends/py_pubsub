@@ -104,9 +104,9 @@ def main(args=None):
     rclpy.init(args=args)
     node_time = 1.0
     ninput = 3
-    nstep = 100
+    nstep = 3600
     a_range = [0, 4]  # the motor range are 0 to 4000 - factor = 1000
-    b_range = [0, 3]  # rate signal range [MIN TIME, MAX TIME]
+    b_range = [0, 20]  # rate signal range [MIN TIME, MAX TIME]
     # form the random signal to motors
     u = multiple_aprbs(a_range, b_range, nstep,
                        ninput, type='int', factor=1000.0)
