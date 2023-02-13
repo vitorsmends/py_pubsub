@@ -35,18 +35,18 @@ class MinimalPublisher(Node):
     def timer_callback(self):
 
         msg = SetPosition()
-        if self.i == 0:
+        if self.i <= 30:
             for j in range(self.sig.shape[0]):  # per motor signal
                 msg.id.append(j+1)
-                msg.position.append(0)
+                msg.position.append(10)
         else:
             for j in range(self.sig.shape[0]):  # per motor signal
                 msg.id.append(j+1)
-                msg.position.append(self.sig[j][self.i-1])
+                msg.position.append(self.sig[j][self.i-31]+10)
                 self.get_logger().info('Motor %d: %s' %
-                                       (j+1, self.sig[j][self.i-1]))
+                                       (j+1, self.sig[j][self.i-31]))
         self.i += 1
-        if (self.i >= self.sig.shape[1]):
+        if (self.i >= self.sig.shape[1]+10):
             self.i = 0
         self.publisher_.publish(msg)
         # self.get_logger().info(msg)
@@ -105,8 +105,8 @@ def main(args=None):
     node_time = 1.0
     ninput = 6
     nstep = 3600
-    a_range = [0, 4]  # the motor range are 0 to 4000 - factor = 1000
-    b_range = [0, 20]  # rate signal range [MIN TIME, MAX TIME]
+    a_range = [0, 2.5]  # the motor range are 0 to 4000 - factor = 1000
+    b_range = [0, 15]  # rate signal range [MIN TIME, MAX TIME]
     # form the random signal to motors
     u = multiple_aprbs(a_range, b_range, nstep,
                        ninput, type='int', factor=1000.0)
