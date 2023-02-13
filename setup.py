@@ -21,6 +21,7 @@ setup(
     entry_points={
             'console_scripts': [
                     'talker = py_pubsub.publisher_member_function:main',
+                    'talker_2 = py_pubsub.aprbs_signal_publisher_member_function:main',
             ],
     },
 )
